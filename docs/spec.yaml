@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: std24192
+  version: 1.0.0
+  description: This is a specification of STD24192
+servers:
+  - url: 'http://localhost:8000'
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      responses:
+        200:
+          content:
+            text/plain:
+              schema:
+                type: string
+  /phones:
+    post:
+      tags:
+        - Phones
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Phone'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+    get:
+      tags:
+        - Phones
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Phone'
+  /phones/{id}:
+    get:
+      tags:
+        - Phones
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Phone details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+        '404':
+          description: The phone was not found
+  /phones/{id}/characteristics:
+    put:
+      tags:
+        - Phones
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/PhoneCharacteristics'
+      responses:
+        $ref: '#/paths/~1phones~1{id}/get/responses/200'
+        '404':
+          $ref: '#/paths/~1phones~1{id}/get/responses/404'
+
+components:
+  requestBodies:
+    PhoneCharacteristics:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PhoneCharacteristics'
+  schemas:
+    PhoneCharacteristics:
+      allOf:
+        - $ref: '#/components/schemas/PhoneCharacteristicsProperties'
+    PhoneCharacteristicsProperties:
+      type: object
+      properties:
+        characteristics:
+          type: object
+          properties:
+            ram_memory:
+              type: integer
+            rom_memory:
+              type: integer
+    Phone:
+      type: object
+      properties:
+        identifier:
+          type: string
+        brand:
+          type: string
+        model:
+          type: string
+        characteristics:
+          $ref: '#/components/schemas/PhoneCharacteristicsProperties'
