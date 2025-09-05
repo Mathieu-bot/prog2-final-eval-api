@@ -21,7 +21,7 @@ This repository contains **answers** for the HEI FastAPI final evaluation held o
 2. Install dependencies:
 
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirement.txt
    ```
 
 3. Run the server:
